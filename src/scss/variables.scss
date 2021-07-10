@@ -38,6 +38,8 @@ $button-color: lighten($text-color, 40%);
 $button-color-primary: darken($brand-primary, 8%);
 $button-color-danger: darken($brand-danger, 10%);
 
+$mobile-breakpoint: 600px;
+
 $themes: (
     light: (
         textColor: $text-color,
