@@ -18,6 +18,7 @@ import { PlatformUtilsService } from 'jslib-common/abstractions/platformUtils.se
 import { PolicyService } from 'jslib-common/abstractions/policy.service';
 import { StateService } from 'jslib-common/abstractions/state.service';
 import { UserService } from 'jslib-common/abstractions/user.service';
+import { MobileNavigationService } from '../mobile/mobile-navigation.service';
 
 import { BroadcasterService } from 'jslib-angular/services/broadcaster.service';
 
@@ -38,7 +39,7 @@ export class AddEditComponent extends BaseAddEditComponent implements OnChanges,
         auditService: AuditService, stateService: StateService,
         userService: UserService, collectionService: CollectionService,
         messagingService: MessagingService, eventService: EventService,
-        policyService: PolicyService, private broadcasterService: BroadcasterService,
+        policyService: PolicyService, private mobileNavigationService: MobileNavigationService, private broadcasterService: BroadcasterService,
         private ngZone: NgZone) {
         super(cipherService, folderService, i18nService, platformUtilsService, auditService, stateService,
             userService, collectionService, messagingService, eventService, policyService);
@@ -72,6 +73,7 @@ export class AddEditComponent extends BaseAddEditComponent implements OnChanges,
             (this.cipher != null && this.cipherId !== this.cipher.id)) {
             this.cipher = null;
         }
+        this.mobileNavigationService.makeActive('add-edit');
         super.load();
     }
 

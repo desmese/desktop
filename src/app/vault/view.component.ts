@@ -25,6 +25,7 @@ import { BroadcasterService } from 'jslib-angular/services/broadcaster.service';
 import { ViewComponent as BaseViewComponent } from 'jslib-angular/components/view.component';
 
 import { CipherView } from 'jslib-common/models/view/cipherView';
+import { MobileNavigationService } from '../mobile/mobile-navigation.service';
 
 const BroadcasterSubscriptionId = 'ViewComponent';
 
@@ -41,6 +42,7 @@ export class ViewComponent extends BaseViewComponent implements OnChanges {
         auditService: AuditService, broadcasterService: BroadcasterService,
         ngZone: NgZone, changeDetectorRef: ChangeDetectorRef,
         userService: UserService, eventService: EventService, apiService: ApiService,
+        private mobileNavigationService: MobileNavigationService,
         private messagingService: MessagingService, passwordRepromptService: PasswordRepromptService) {
         super(cipherService, totpService, tokenService, i18nService, cryptoService, platformUtilsService,
             auditService, window, broadcasterService, ngZone, changeDetectorRef, userService, eventService,
@@ -58,6 +60,7 @@ export class ViewComponent extends BaseViewComponent implements OnChanges {
                 }
             });
         });
+        this.mobileNavigationService.makeActive('view');
     }
 
     ngOnDestroy() {
@@ -67,6 +70,11 @@ export class ViewComponent extends BaseViewComponent implements OnChanges {
 
     async ngOnChanges() {
         await super.load();
+    }
+
+    async load() {
+        this.mobileNavigationService.makeActive('view');
+        super.load();
     }
 
     viewHistory() {

@@ -18,6 +18,7 @@ import { ToasterService } from 'angular2-toaster';
 import { BroadcasterService } from 'jslib-angular/services/broadcaster.service';
 
 import { ModalComponent } from 'jslib-angular/components/modal.component';
+import { MobileNavigationService } from '../mobile/mobile-navigation.service';
 
 import { AddEditComponent } from './add-edit.component';
 import { AttachmentsComponent } from './attachments.component';
@@ -86,7 +87,9 @@ export class VaultComponent implements OnInit, OnDestroy {
         private ngZone: NgZone, private syncService: SyncService,
         private toasterService: ToasterService, private messagingService: MessagingService,
         private platformUtilsService: PlatformUtilsService, private eventService: EventService,
-        private totpService: TotpService, private userService: UserService, private passwordRepromptService: PasswordRepromptService) { }
+        private totpService: TotpService, private userService: UserService, private passwordRepromptService: PasswordRepromptService,
+                private mobileNavigationService: MobileNavigationService) {
+    }
 
     async ngOnInit() {
         this.userHasPremiumAccess = await this.userService.canAccessPremium();
@@ -150,6 +153,7 @@ export class VaultComponent implements OnInit, OnDestroy {
                             const value = await this.totpService.getCode(tCipher.login.totp);
                             this.copyValue(tCipher, value, 'verificationCodeTotp', 'TOTP');
                         }
+                        break;
                     default:
                         detectChanges = false;
                         break;
@@ -164,11 +168,16 @@ export class VaultComponent implements OnInit, OnDestroy {
         if (!this.syncService.syncInProgress) {
             await this.load();
         }
+
+        this.mobileNavigationService.activeView.subscribe((message: string) => {
+            console.log('Mobile: Event received ' + message);
+        });
         document.body.classList.remove('layout_frontend');
     }
 
     ngOnDestroy() {
         this.broadcasterService.unsubscribe(BroadcasterSubscriptionId);
+        this.mobileNavigationService.activeView.unsubscribe();
         document.body.classList.add('layout_frontend');
     }
 

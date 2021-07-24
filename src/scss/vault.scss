@@ -334,6 +334,11 @@
 
         .inner-content {
             min-width: 400px;
+
+            @media (max-width: $mobile-breakpoint) {
+                min-width: 100%;
+                max-width: 100%;
+            }
         }
 
         .box {
